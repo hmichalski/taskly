@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Taskly.API.Models;
 
 namespace Taskly.API.Data;
 
@@ -9,4 +10,5 @@ public class ApplicationDbContext : DbContext
     }
 
     // DbSets
+    public DbSet<User> Users { get; set; } = null!;
 }
