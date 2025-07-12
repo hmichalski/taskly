@@ -8,10 +8,10 @@ public class User
     public string PasswordHash { get; set; } = null!;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public bool IsFreelancer { get; set; } = false;
+    public Freelancer? Freelancer { get; set; }
 
     // to be implemented later
 
-    // public Freelancer? Freelancer
     // ICollection<Order> Orders
     // ICollection<Message> Messages
     // ..
