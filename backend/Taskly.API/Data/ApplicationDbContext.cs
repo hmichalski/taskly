@@ -12,6 +12,8 @@ public class ApplicationDbContext : DbContext
     // DbSets
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Freelancer> Freelancers { get; set; } = null!;
+    public DbSet<Address> Addresses { get; set; } = null!;
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -21,5 +23,11 @@ public class ApplicationDbContext : DbContext
             .HasOne(u => u.Freelancer)
             .WithOne(f => f.User)
             .HasForeignKey<Freelancer>(f => f.UserId);
+
+        // TODO: to be verified
+        modelBuilder.Entity<Freelancer>()
+            .HasOne(f => f.Address)
+            .WithOne(a => a.Freelancer)
+            .HasForeignKey<Address>(a => a.FreelancerId);
     }
 }
