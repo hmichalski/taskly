@@ -11,6 +11,9 @@ public class User
 
     public Freelancer? Freelancer { get; set; }
 
+    public ICollection<UserFollows> Following { get; set; } = new List<UserFollows>();
+    public ICollection<UserFollows> Followers { get; set; } = new List<UserFollows>();
+
     // To be implemented later:
     // public ICollection<Order> Orders { get; set; }
     // public ICollection<Message> Messages { get; set; }
