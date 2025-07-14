@@ -1,4 +1,4 @@
-namespace Taskly.API.Models;
+namespace App.Entities;
 
 public class User
 {
@@ -8,11 +8,10 @@ public class User
     public string PasswordHash { get; set; } = null!;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public bool IsFreelancer { get; set; } = false;
+
     public Freelancer? Freelancer { get; set; }
 
-    // to be implemented later
-
-    // ICollection<Order> Orders
-    // ICollection<Message> Messages
-    // ..
+    // To be implemented later:
+    // public ICollection<Order> Orders { get; set; }
+    // public ICollection<Message> Messages { get; set; }
 }

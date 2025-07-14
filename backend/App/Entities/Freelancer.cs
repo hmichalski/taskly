@@ -1,4 +1,4 @@
-namespace Taskly.API.Models;
+namespace App.Entities;
 
 public class Freelancer
 {
@@ -9,5 +9,5 @@ public class Freelancer
     public string? PaymentDetails { get; set; }
 
     public User User { get; set; } = null!;
-    public Address? Address { get; set; } // TODO: to be verified
+    public Address? Address { get; set; }
 }

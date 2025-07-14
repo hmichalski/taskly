@@ -1,9 +1,9 @@
-namespace Taskly.API.Models;
+namespace App.Entities;
 
 public class Address
 {
     public int Id { get; set; }
-    public int FreelancerId { get; set; } // TODO: to be verified
+    public int FreelancerId { get; set; } // Foreign key
     public string? Street { get; set; }
     public string? City { get; set; }
     public string? PostalCode { get; set; }

@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Taskly.API.Models;
+using App.Entities;
 
-namespace Taskly.API.Data;
+namespace App.DB;
 
-public class ApplicationDbContext : DbContext
+public class AppDbContext : DbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
     }
 
@@ -13,7 +13,6 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; } = null!;
     public DbSet<Freelancer> Freelancers { get; set; } = null!;
     public DbSet<Address> Addresses { get; set; } = null!;
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -24,7 +23,6 @@ public class ApplicationDbContext : DbContext
             .WithOne(f => f.User)
             .HasForeignKey<Freelancer>(f => f.UserId);
 
-        // TODO: to be verified
         modelBuilder.Entity<Freelancer>()
             .HasOne(f => f.Address)
             .WithOne(a => a.Freelancer)
