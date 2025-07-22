@@ -124,6 +124,13 @@ public class AppDbContext : DbContext
             .HasForeignKey(i => i.ServiceId)
             .OnDelete(DeleteBehavior.Cascade); // when service is deleted, its images are deleted
 
+        // 1-N: User has many Images
+        modelBuilder.Entity<Image>()
+            .HasOne(i => i.User)
+            .WithMany(u => u.Images)
+            .HasForeignKey(i => i.UserId)
+            .OnDelete(DeleteBehavior.Cascade); // when user is deleted, their images are deleted
+
         // 1-1: User-ShoppingCart
         modelBuilder.Entity<ShoppingCart>()
             .HasOne(sc => sc.User)
@@ -138,13 +145,15 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<ShoppingCartService>()
             .HasOne(scs => scs.ShoppingCart)
             .WithMany(sc => sc.Services)
-            .HasForeignKey(scs => scs.ShoppingCartId);
+            .HasForeignKey(scs => scs.ShoppingCartId)
+            .OnDelete(DeleteBehavior.Cascade); // when shopping cart is deleted, associated services in the cart are removed
 
         // N-N: Service is in many ShoppingCarts
         modelBuilder.Entity<ShoppingCartService>()
             .HasOne(scs => scs.Service)
             .WithMany(s => s.ShoppingCarts)
-            .HasForeignKey(scs => scs.ServiceId);
+            .HasForeignKey(scs => scs.ServiceId)
+            .OnDelete(DeleteBehavior.Cascade); // when service is deleted, associated shopping cart links are removed
 
         // composite key for OrderService (orderId + serviceId)
         modelBuilder.Entity<OrderService>()
@@ -157,19 +166,26 @@ public class AppDbContext : DbContext
             .HasForeignKey(os => os.OrderId)
             .OnDelete(DeleteBehavior.Cascade); // when order is deleted, associated order-service links are removed
 
+        // 1-N: Service is ordered in many Orders
+        modelBuilder.Entity<OrderService>()
+            .HasOne(os => os.Service)
+            .WithMany(s => s.OrderServices)
+            .HasForeignKey(os => os.ServiceId)
+            .OnDelete(DeleteBehavior.Cascade); // when service is deleted, associated order-service links are removed
+
         // 1-N: Client (User) places many Orders
         modelBuilder.Entity<Order>()
             .HasOne(o => o.Client)
             .WithMany(u => u.OrdersAsClient)
             .HasForeignKey(o => o.ClientId)
-            .OnDelete(DeleteBehavior.Cascade); // when service is deleted, associated order-service links are removed
+            .OnDelete(DeleteBehavior.Cascade); // when client is deleted, their orders are removed
 
         // 1-N: Freelancer (User) receives many Orders
         modelBuilder.Entity<Order>()
             .HasOne(o => o.Freelancer)
             .WithMany(u => u.OrdersAsFreelancer)
             .HasForeignKey(o => o.FreelancerId)
-            .OnDelete(DeleteBehavior.Cascade); // when user is deleted, their orders are removed
+            .OnDelete(DeleteBehavior.Cascade); // when freelancer is deleted, their orders are removed
 
         // 1-1: Order-Payment
         modelBuilder.Entity<Payment>()

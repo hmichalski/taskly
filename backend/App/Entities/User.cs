@@ -21,4 +21,5 @@ public class User
     public ICollection<Order> OrdersAsClient { get; set; } = new List<Order>();
     public ICollection<Order> OrdersAsFreelancer { get; set; } = new List<Order>();
     public ICollection<OrderReview> OrderReviews { get; set; } = new List<OrderReview>();
+    public ICollection<Image> Images { get; set; } = new List<Image>();
 }
