@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using App.Entities;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace App.DB;
 
@@ -14,6 +15,9 @@ public class AppDbContext : DbContext
     public DbSet<Freelancer> Freelancers { get; set; } = null!;
     public DbSet<Address> Addresses { get; set; } = null!;
     public DbSet<UserFollows> UserFollows { get; set; } = null!;
+    public DbSet<UserChat> UserChats { get; set; } = null!;
+    public DbSet<Chat> Chats { get; set; } = null!;
+    public DbSet<Message> Messages { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -48,5 +52,35 @@ public class AppDbContext : DbContext
             .WithMany(u => u.Followers)
             .HasForeignKey(uf => uf.FollowedUserId)
             .OnDelete(DeleteBehavior.Cascade); // when user is deleted, others "following" records of them are removed
+
+        // N-N: User-Chat via UserChat
+        modelBuilder.Entity<UserChat>()
+            .HasKey(uc => new { uc.UserId, uc.ChatId });
+
+        modelBuilder.Entity<UserChat>()
+            .HasOne(uc => uc.User)
+            .WithMany(u => u.UserChats)
+            .HasForeignKey(uc => uc.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<UserChat>()
+            .HasOne(uc => uc.Chat)
+            .WithMany(c => c.UserChats)
+            .HasForeignKey(uc => uc.ChatId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // 1-N: Chat-Messages
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Chat)
+            .WithMany(c => c.Messages)
+            .HasForeignKey(m => m.ChatId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // 1-N: User (sender)-Messages
+        modelBuilder.Entity<Message>()
+            .HasOne(m => m.Sender)
+            .WithMany(u => u.SentMessages)
+            .HasForeignKey(m => m.SenderId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
