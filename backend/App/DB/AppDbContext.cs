@@ -23,6 +23,8 @@ public class AppDbContext : DbContext
     public DbSet<Image> Images { get; set; } = null!;
     public DbSet<ShoppingCart> ShoppingCarts { get; set; } = null!;
     public DbSet<ShoppingCartService> ShoppingCartServices { get; set; } = null!;
+    public DbSet<Order> Orders { get; set; } = null!;
+    public DbSet<OrderService> OrderServices { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -141,5 +143,30 @@ public class AppDbContext : DbContext
             .HasOne(scs => scs.Service)
             .WithMany(s => s.ShoppingCarts)
             .HasForeignKey(scs => scs.ServiceId);
+
+        // composite key for OrderService (orderId + serviceId)
+        modelBuilder.Entity<OrderService>()
+            .HasKey(os => new { os.OrderId, os.ServiceId });
+
+        // 1-N: Order has many ordered Services
+        modelBuilder.Entity<OrderService>()
+            .HasOne(os => os.Order)
+            .WithMany(o => o.OrderServices)
+            .HasForeignKey(os => os.OrderId)
+            .OnDelete(DeleteBehavior.Cascade); // when order is deleted, associated order-service links are removed
+
+        // 1-N: Service is ordered in many Orders
+        modelBuilder.Entity<OrderService>()
+            .HasOne(os => os.Service)
+            .WithMany(s => s.OrderServices)
+            .HasForeignKey(os => os.ServiceId)
+            .OnDelete(DeleteBehavior.Cascade); // when service is deleted, associated order-service links are removed
+
+        // 1-N: User places many Orders
+        modelBuilder.Entity<Order>()
+            .HasOne(o => o.User)
+            .WithMany(u => u.Orders)
+            .HasForeignKey(o => o.UserId)
+            .OnDelete(DeleteBehavior.Cascade); // when user is deleted, their orders are removed
     }
 }
