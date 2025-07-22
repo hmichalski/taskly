@@ -3,7 +3,7 @@ namespace App.Entities;
 public class Address
 {
     public int Id { get; set; }
-    public int FreelancerId { get; set; } // Foreign key
+    public int FreelancerId { get; set; }
     public string? Street { get; set; }
     public string? City { get; set; }
     public string? PostalCode { get; set; }

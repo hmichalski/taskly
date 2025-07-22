@@ -9,5 +9,5 @@ public class Freelancer
     public string? PaymentDetails { get; set; }
 
     public User User { get; set; } = null!;
-    public Address? Address { get; set; }
+    public Address Address { get; set; } = null!;
 }
