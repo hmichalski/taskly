@@ -21,6 +21,8 @@ public class AppDbContext : DbContext
     public DbSet<Service> Services { get; set; } = null!;
     public DbSet<UserServiceLikes> UserServiceLikes { get; set; } = null!;
     public DbSet<Image> Images { get; set; } = null!;
+    public DbSet<ShoppingCart> ShoppingCarts { get; set; } = null!;
+    public DbSet<ShoppingCartService> ShoppingCartServices { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -117,5 +119,27 @@ public class AppDbContext : DbContext
             .WithMany(s => s.Images)
             .HasForeignKey(i => i.ServiceId)
             .OnDelete(DeleteBehavior.Cascade); // when service is deleted, its images are deleted
+
+        // 1-1: User-ShoppingCart
+        modelBuilder.Entity<ShoppingCart>()
+            .HasOne(sc => sc.User)
+            .WithOne(u => u.ShoppingCart)
+            .HasForeignKey<ShoppingCart>(sc => sc.UserId);
+
+        // composite key for ShoppingCartService (cartId + serviceId)
+        modelBuilder.Entity<ShoppingCartService>()
+            .HasKey(scs => new { scs.ShoppingCartId, scs.ServiceId });
+
+        // N-N: ShoppingCart contains multiple Services
+        modelBuilder.Entity<ShoppingCartService>()
+            .HasOne(scs => scs.ShoppingCart)
+            .WithMany(sc => sc.Services)
+            .HasForeignKey(scs => scs.ShoppingCartId);
+
+        // N-N: Service is in many ShoppingCarts
+        modelBuilder.Entity<ShoppingCartService>()
+            .HasOne(scs => scs.Service)
+            .WithMany(s => s.ShoppingCarts)
+            .HasForeignKey(scs => scs.ServiceId);
     }
 }

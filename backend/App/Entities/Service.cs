@@ -20,6 +20,7 @@ public class Service
     public User User { get; set; } = null!;
     public ICollection<UserServiceLikes> Likes { get; set; } = new List<UserServiceLikes>();
     public ICollection<Image> Images { get; set; } = new List<Image>();
+    public ICollection<ShoppingCartService> ShoppingCarts { get; set; } = new List<ShoppingCartService>();
 
     //public ICollection<OrderService> OrderServices { get; set; } = new List<OrderService>();
     //public ICollection<ShoppingCartService> ShoppingCartServices { get; set; } = new List<ShoppingCartService>();

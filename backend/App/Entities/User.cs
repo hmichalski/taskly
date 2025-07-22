@@ -10,6 +10,7 @@ public class User
     public bool IsFreelancer { get; set; } = false;
 
     public Freelancer? Freelancer { get; set; }
+    public ShoppingCart? ShoppingCart { get; set; }
 
     public ICollection<UserFollows> Following { get; set; } = new List<UserFollows>();
     public ICollection<UserFollows> Followers { get; set; } = new List<UserFollows>();
