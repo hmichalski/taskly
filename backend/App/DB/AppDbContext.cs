@@ -157,18 +157,18 @@ public class AppDbContext : DbContext
             .HasForeignKey(os => os.OrderId)
             .OnDelete(DeleteBehavior.Cascade); // when order is deleted, associated order-service links are removed
 
-        // 1-N: Service is ordered in many Orders
-        modelBuilder.Entity<OrderService>()
-            .HasOne(os => os.Service)
-            .WithMany(s => s.OrderServices)
-            .HasForeignKey(os => os.ServiceId)
+        // 1-N: Client (User) places many Orders
+        modelBuilder.Entity<Order>()
+            .HasOne(o => o.Client)
+            .WithMany(u => u.OrdersAsClient)
+            .HasForeignKey(o => o.ClientId)
             .OnDelete(DeleteBehavior.Cascade); // when service is deleted, associated order-service links are removed
 
-        // 1-N: User places many Orders
+        // 1-N: Freelancer (User) receives many Orders
         modelBuilder.Entity<Order>()
-            .HasOne(o => o.User)
-            .WithMany(u => u.Orders)
-            .HasForeignKey(o => o.UserId)
+            .HasOne(o => o.Freelancer)
+            .WithMany(u => u.OrdersAsFreelancer)
+            .HasForeignKey(o => o.FreelancerId)
             .OnDelete(DeleteBehavior.Cascade); // when user is deleted, their orders are removed
 
         // 1-1: Order-Payment

@@ -11,7 +11,8 @@ public class Service
     public string Description { get; set; } = null!;
     public string Category { get; set; } = null!;
     public decimal Price { get; set; }
-    public decimal? DeliveryTime { get; set; }
+    public decimal Budget { get; set; }
+    public int DeliveryTime { get; set; }
     public DateTime? Deadline { get; set; }
     public string Status { get; set; } = "AVAILABLE";
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

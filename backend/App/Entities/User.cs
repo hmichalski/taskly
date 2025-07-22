@@ -18,6 +18,7 @@ public class User
     public ICollection<Message> SentMessages { get; set; } = new List<Message>();
     public ICollection<Service> Services { get; set; } = new List<Service>();
     public ICollection<UserServiceLikes> LikedServices { get; set; } = new List<UserServiceLikes>();
-    public ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Order> OrdersAsClient { get; set; } = new List<Order>();
+    public ICollection<Order> OrdersAsFreelancer { get; set; } = new List<Order>();
     public ICollection<OrderReview> OrderReviews { get; set; } = new List<OrderReview>();
 }
