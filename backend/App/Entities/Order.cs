@@ -9,6 +9,6 @@ public class Order
 
     public User User { get; set; } = null!;
     public ICollection<OrderService> OrderServices { get; set; } = new List<OrderService>();
-    //public Payment? Payment { get; set; }
-    //public OrderReview? Review { get; set; }
+    public Payment? Payment { get; set; }
+    public OrderReview? OrderReview { get; set; }
 }

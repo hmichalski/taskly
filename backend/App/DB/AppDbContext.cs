@@ -25,6 +25,8 @@ public class AppDbContext : DbContext
     public DbSet<ShoppingCartService> ShoppingCartServices { get; set; } = null!;
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<OrderService> OrderServices { get; set; } = null!;
+    public DbSet<Payment> Payments { get; set; } = null!;
+    public DbSet<OrderReview> OrderReviews { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -168,5 +170,26 @@ public class AppDbContext : DbContext
             .WithMany(u => u.Orders)
             .HasForeignKey(o => o.UserId)
             .OnDelete(DeleteBehavior.Cascade); // when user is deleted, their orders are removed
+
+        // 1-1: Order-Payment
+        modelBuilder.Entity<Payment>()
+            .HasOne(p => p.Order)
+            .WithOne(o => o.Payment)
+            .HasForeignKey<Payment>(p => p.OrderId)
+            .OnDelete(DeleteBehavior.Cascade); // delete payment if order is deleted
+
+        // 1-1: Order-OrderReview
+        modelBuilder.Entity<OrderReview>()
+            .HasOne(or => or.Order)
+            .WithOne(o => o.OrderReview)
+            .HasForeignKey<OrderReview>(or => or.OrderId)
+            .OnDelete(DeleteBehavior.Cascade); // delete review if order is deleted
+
+        // 1-N: User-OrderReviews
+        modelBuilder.Entity<OrderReview>()
+            .HasOne(or => or.User)
+            .WithMany(u => u.OrderReviews)
+            .HasForeignKey(or => or.UserId)
+            .OnDelete(DeleteBehavior.Cascade); // when user is deleted, their reviews are deleted
     }
 }
