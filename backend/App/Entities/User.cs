@@ -15,6 +15,8 @@ public class User
     public ICollection<UserFollows> Followers { get; set; } = new List<UserFollows>();
     public ICollection<UserChat> UserChats { get; set; } = new List<UserChat>();
     public ICollection<Message> SentMessages { get; set; } = new List<Message>();
+    public ICollection<Service> Services { get; set; } = new List<Service>();
+    public ICollection<UserServiceLikes> LikedServices { get; set; } = new List<UserServiceLikes>();
 
     // To be implemented later:
     // public ICollection<Order> Orders { get; set; }

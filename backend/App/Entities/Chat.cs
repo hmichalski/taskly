@@ -7,5 +7,4 @@ public class Chat
 
     public ICollection<UserChat> UserChats { get; set; } = new List<UserChat>();
     public ICollection<Message> Messages { get; set; } = new List<Message>();
-
 }

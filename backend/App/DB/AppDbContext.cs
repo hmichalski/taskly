@@ -18,6 +18,9 @@ public class AppDbContext : DbContext
     public DbSet<UserChat> UserChats { get; set; } = null!;
     public DbSet<Chat> Chats { get; set; } = null!;
     public DbSet<Message> Messages { get; set; } = null!;
+    public DbSet<Service> Services { get; set; } = null!;
+    public DbSet<UserServiceLikes> UserServiceLikes { get; set; } = null!;
+    public DbSet<Image> Images { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,5 +85,37 @@ public class AppDbContext : DbContext
             .WithMany(u => u.SentMessages)
             .HasForeignKey(m => m.SenderId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // 1-N: User-Service
+        modelBuilder.Entity<Service>()
+            .HasOne(s => s.User)
+            .WithMany(u => u.Services)
+            .HasForeignKey(s => s.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        // composite key for UserServiceLikes (userId + serviceId)
+        modelBuilder.Entity<UserServiceLikes>()
+            .HasKey(usl => new { usl.UserId, usl.ServiceId });
+
+        // 1-N: User likes many Services
+        modelBuilder.Entity<UserServiceLikes>()
+            .HasOne(usl => usl.User)
+            .WithMany(u => u.LikedServices)
+            .HasForeignKey(usl => usl.UserId)
+            .OnDelete(DeleteBehavior.Cascade); // when user is deleted, their likes are removed
+
+        // 1-N: Service is liked by many Users
+        modelBuilder.Entity<UserServiceLikes>()
+            .HasOne(usl => usl.Service)
+            .WithMany(s => s.Likes)
+            .HasForeignKey(usl => usl.ServiceId)
+            .OnDelete(DeleteBehavior.Cascade); // when service is deleted, associated likes are removed
+
+        // 1-N: Service has many Images
+        modelBuilder.Entity<Image>()
+            .HasOne(i => i.Service)
+            .WithMany(s => s.Images)
+            .HasForeignKey(i => i.ServiceId)
+            .OnDelete(DeleteBehavior.Cascade); // when service is deleted, its images are deleted
     }
 }
