@@ -5,10 +5,16 @@
 public class ServicesController : ControllerBase
 {
     private readonly IServiceService _svc;
-    public ServicesController(IServiceService svc) => _svc = svc;
+    public ServicesController(IServiceService svc)
+    {
+        this._svc = svc;
+    }
 
-    // /api/services
+
     [HttpGet]
-    public async Task<IEnumerable<ServiceListDTO>> GetAll() =>
-        await _svc.GetAllAsync();
+    public async Task<ActionResult<IEnumerable<ServiceListDTO>>> GetAll()
+    {
+        var services = await _svc.GetAllAsync();
+        return Ok(services);
+    }
 }
